@@ -1,48 +1,47 @@
 package com.sasank.reminderpro
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TimeZoneAdapter(
-    private val timezones: MutableList<String>,
-    private val selectedItems: MutableSet<String>
-) : RecyclerView.Adapter<TimeZoneAdapter.TimezoneViewHolder>() {
+    private val context: Context,
+    private val zones: MutableList<String>,
+    private val onDelete: (String) -> Unit
+) : RecyclerView.Adapter<TimeZoneAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimezoneViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_time_zone, parent, false)
-        return TimezoneViewHolder(view)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val timeText: TextView = view.findViewById(R.id.timezoneTimeText)
+        val deleteIcon: ImageView = view.findViewById(R.id.deleteIcon)
     }
 
-    override fun onBindViewHolder(holder: TimezoneViewHolder, position: Int) {
-        val zoneId = timezones[position]
-        holder.bind(zoneId)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.item_time_zone, parent, false)
+        return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = timezones.size
+    override fun getItemCount() = zones.size
 
-    fun removeSelected() {
-        timezones.removeAll(selectedItems)
-        selectedItems.clear()
-        notifyDataSetChanged()
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val zoneId = zones[position]
+        val sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone(zoneId)
+        holder.timeText.text = "${sdf.format(Date())} ($zoneId)"
 
-    inner class TimezoneViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textView = itemView.findViewById<TextView>(R.id.timezoneTimeText)
-        private val checkBox = itemView.findViewById<CheckBox>(R.id.timezoneCheckbox)
-
-        fun bind(zoneId: String) {
-            textView.text = zoneId
-            checkBox.setOnCheckedChangeListener(null)
-            checkBox.isChecked = selectedItems.contains(zoneId)
-
-            checkBox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) selectedItems.add(zoneId)
-                else selectedItems.remove(zoneId)
-            }
+        holder.deleteIcon.setOnClickListener {
+            onDelete(zoneId)
         }
+    }
+
+    fun moveItem(from: Int, to: Int) {
+        val moved = zones.removeAt(from)
+        zones.add(to, moved)
+        notifyItemMoved(from, to)
     }
 }
