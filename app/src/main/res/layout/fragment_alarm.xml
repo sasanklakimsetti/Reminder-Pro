@@ -4,14 +4,28 @@
     android:id="@+id/alarmFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:layout_marginTop="30dp"
     tools:context=".Alarm">
+    <LinearLayout
+        android:id="@+id/alarmTextLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alarm"
+            android:gravity="center"
+            android:textSize="60sp"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/alarmRecyclerView"
         android:layout_above="@+id/addAlarm"
+        android:layout_below="@+id/alarmTextLayout"
         android:padding="12dp"
         />
 

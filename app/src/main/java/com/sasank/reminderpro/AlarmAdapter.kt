@@ -19,15 +19,15 @@ class AlarmAdapter(
         val alarmTitle: TextView=view.findViewById(R.id.alarmTitle)
         val alarmSwitch: Switch=view.findViewById(R.id.alarmSwitch)
 
-        init{
-            view.setOnClickListener {
-                onEdit(alarms[adapterPosition],adapterPosition)
-            }
-            view.setOnLongClickListener {
-                onDelete(adapterPosition)
-                true
-            }
-        }
+//        init{
+//            view.setOnClickListener {
+//                onEdit(alarms[adapterPosition],adapterPosition)
+//            }
+//            view.setOnLongClickListener {
+//                onDelete(adapterPosition)
+//                true
+//            }
+//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
@@ -42,8 +42,17 @@ class AlarmAdapter(
         holder.alarmSwitch.isChecked=alarm.isEnabled
 
         holder.alarmSwitch.setOnCheckedChangeListener { _, isChecked ->
-            alarms[position].isEnabled=isChecked
-            onSwitchToggle(alarms[position])
+            alarm.isEnabled=isChecked
+            onSwitchToggle(alarm)
+        }
+
+        holder.itemView.setOnClickListener {
+            onEdit(alarm, position)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onDelete(position)
+            true
         }
     }
 
