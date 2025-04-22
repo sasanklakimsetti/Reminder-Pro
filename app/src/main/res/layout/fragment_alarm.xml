@@ -26,8 +26,7 @@
         android:id="@+id/alarmRecyclerView"
         android:layout_above="@+id/addAlarm"
         android:layout_below="@+id/alarmTextLayout"
-        android:padding="12dp"
-        />
+        android:padding="12dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -36,6 +35,5 @@
         android:src="@android:drawable/ic_input_add"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="24dp"
-        />
+        android:layout_margin="24dp" />
 </RelativeLayout>
