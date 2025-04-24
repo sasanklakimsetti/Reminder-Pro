@@ -1,15 +1,10 @@
-package com.sasank.reminderpro
+package com.sasank.reminderpro.ui.reminder
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.sasank.reminderpro.R
 
 /**
  * A simple [Fragment] subclass.
@@ -24,8 +19,8 @@ class ReminderFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            param1 = it.getString(com.sasank.reminderpro.ARG_PARAM1)
+            param2 = it.getString(com.sasank.reminderpro.ARG_PARAM2)
         }
     }
 
@@ -51,8 +46,8 @@ class ReminderFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             ReminderFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(com.sasank.reminderpro.ARG_PARAM1, param1)
+                    putString(com.sasank.reminderpro.ARG_PARAM2, param2)
                 }
             }
     }
