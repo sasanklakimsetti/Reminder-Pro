@@ -23,11 +23,11 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.alarm->{
-                        replaceFragment(Alarm())
+                        replaceFragment(AlarmFragment())
                         true
                     }
                     R.id.reminder->{
-                        replaceFragment(Reminder())
+                        replaceFragment(ReminderFragment())
                         true
                     }
                     else->{
