@@ -1,59 +1,73 @@
 package com.sasank.reminderpro
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.sasank.reminderpro.utils.AlarmUtils
+import com.sasank.reminderpro.utils.PreferenceHelper
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ReminderFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ReminderFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class ReminderFragment: Fragment(){
+    private lateinit var recycleView: RecyclerView
+    private lateinit var tvEmptyView: TextView
+    private lateinit var fabAddReminder: FloatingActionButton
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var reminderAdapter: ReminderAdapter
+    private lateinit var preferenceHelper: PreferenceHelper
+    private lateinit var alarmUtils: AlarmUtils
+
+    private val reminderResultLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        result->
+        if(result.resultCode== Activity.RESULT_OK){
+            loadReminders()
+        }
+    }
+
+    private val notificationPermissionLauncher=registerForActivityResult(ActivityResultContracts.RequestPermission()){
+        isGranted->
+        if(!isGranted){
+            showNotificationPermissionExplanation()
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reminder, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ReminderFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ReminderFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        preferenceHelper= PreferenceHelper(requireContext())
+        alarmUtils= AlarmUtils(requireContext())
+
+        initViews(view)
+        setupListeners()
+        loadReminders()
+
+        checkNotificationPermission()
+
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.S){
+            val alarmManager=requireContext().getSystemService(Activity.ALARM_SERVICE) as android.app.AlarmManager
+            if(!alarmManager.canScheduleExactAlarms()){
+                showExactAlarmPermissionDialog()
             }
+        }
+    }
+
+    private fun initViews(view: View){
+        recycleView=view.findViewById(R.id.recyclerView)
+        tvEmptyView = view.findViewById(R.id.tvEmptyView)
+        fabAddReminder = view.findViewById(R.id.fabAddReminder)
     }
 }
