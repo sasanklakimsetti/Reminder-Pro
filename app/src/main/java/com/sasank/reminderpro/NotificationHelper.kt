@@ -33,8 +33,8 @@ class NotificationHelper(private val context: Context) {
     }
 
     fun showNotification(reminderId: Int, title: String, description: String){
-        val intent= Intent(context, ReminderFragment::class.java).apply {
-            flags= Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("reminder_id", reminderId)
         }
 

@@ -132,20 +132,23 @@ class ReminderEditActivity : AppCompatActivity() {
             updateDateTimeDisplay()
         }, hour, minute, false).show()
     }
-    private fun updateDateTimeDisplay(){
+    private fun updateDateTimeDisplay() {
         val day = reminderCalendar.get(Calendar.DAY_OF_MONTH)
         val month = reminderCalendar.get(Calendar.MONTH)
         val year = reminderCalendar.get(Calendar.YEAR)
         val monthNames = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
-        tvSelectedDate.text = "$day ${monthNames[month]} $year"
+
+        val dateText = "$day ${monthNames[month]} $year"
+
         val hour = reminderCalendar.get(Calendar.HOUR_OF_DAY)
         val minute = reminderCalendar.get(Calendar.MINUTE)
         val amPm = if (hour < 12) "AM" else "PM"
         val hourFormatted = if (hour % 12 == 0) 12 else hour % 12
-        tvSelectedDate.text = String.format("%d:%02d %s", hourFormatted, minute, amPm)
 
+        val timeText = String.format("%d:%02d %s", hourFormatted, minute, amPm)
 
-
+        // Set the date and time text to the TextView
+        tvSelectedDate.text = "$dateText - $timeText"
     }
 
     private fun saveReminder() {
