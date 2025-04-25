@@ -11,85 +11,99 @@ import java.util.Calendar
 
 class AlarmUtils(private val context: Context) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    fun scheduleAlarm(reminder: Reminder){
-        val intent = Intent (context,AlarmReceiver::class.java).apply{
+
+    fun scheduleAlarm(reminder: Reminder) {
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(AlarmReceiver.EXTRA_REMINDER_ID, reminder.id)
             putExtra(AlarmReceiver.EXTRA_REMINDER_TITLE, reminder.title)
             putExtra(AlarmReceiver.EXTRA_REMINDER_DESC, reminder.description)
         }
-        val pendingIntent = PendingIntent.getBroadcast(context, reminder.id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        if (!reminder.isEnabled){
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            reminder.id,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        if (!reminder.isEnabled) {
             cancelAlarm(reminder.id)
             return
         }
+
         val triggerTime = reminder.timeInMillis
-        when{
-            reminder.isRepeating && reminder.repeatInterval != Reminder.RepeatInterval.NONE ->
-            {
-                val intervalMillis = when(reminder.repeatInterval){
+        when {
+            reminder.isRepeating && reminder.repeatInterval != Reminder.RepeatInterval.NONE -> {
+                val intervalMillis = when (reminder.repeatInterval) {
                     Reminder.RepeatInterval.DAILY -> AlarmManager.INTERVAL_DAY
                     Reminder.RepeatInterval.WEEKLY -> AlarmManager.INTERVAL_DAY * 7
                     Reminder.RepeatInterval.MONTHLY -> AlarmManager.INTERVAL_DAY * 30
                     else -> 0
-
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                    if( alarmManager.canScheduleExactAlarms()){
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (alarmManager.canScheduleExactAlarms()) {
                         alarmManager.setRepeating(
                             AlarmManager.RTC_WAKEUP,
                             triggerTime,
                             intervalMillis,
-                            pendingIntent)
+                            pendingIntent
+                        )
                     }
-                }
-                else{
+                } else {
                     alarmManager.setRepeating(
                         AlarmManager.RTC_WAKEUP,
                         triggerTime,
                         intervalMillis,
-                        pendingIntent)
+                        pendingIntent
+                    )
                 }
             }
             else -> {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-                    if( alarmManager.canScheduleExactAlarms()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (alarmManager.canScheduleExactAlarms()) {
                         alarmManager.setExact(
                             AlarmManager.RTC_WAKEUP,
                             triggerTime,
-                            pendingIntent)
-                }
-                    else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                        alarmManager.setExactAndAllowWhileIdle(
-                            AlarmManager.RTC_WAKEUP,
-                            triggerTime,
-                            pendingIntent)
+                            pendingIntent
+                        )
                     }
-                }
-                else{
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTime,
+                        pendingIntent
+                    )
+                } else {
                     alarmManager.setExact(
                         AlarmManager.RTC_WAKEUP,
                         triggerTime,
                         pendingIntent
-                        )
-                    }
+                    )
+                }
             }
         }
     }
-    fun cancelAlarm(reminder : Int){
+
+    // Method to cancel alarm by ID
+    fun cancelAlarm(reminderId: Int) {
         val intent = Intent(context, AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            reminder,
+            reminderId,
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        pendingIntent?.let{
+        pendingIntent?.let {
             alarmManager.cancel(it)
             it.cancel()
         }
-
-
     }
+
+    // Overloaded method to cancel alarm using Reminder object
+    fun cancelAlarm(reminder: Reminder) {
+        cancelAlarm(reminder.id)
+    }
+
     fun getFormattedTime(timeInMillis: Long): String {
         val calendar = Calendar.getInstance().apply {
             this.timeInMillis = timeInMillis
@@ -102,8 +116,9 @@ class AlarmUtils(private val context: Context) {
 
         return String.format("%d:%02d %s", hourFormatted, minute, amPm)
     }
+
     fun getFormattedDate(timeInMillis: Long): String {
-        val calendar = Calendar.getInstance().apply{
+        val calendar = Calendar.getInstance().apply {
             this.timeInMillis = timeInMillis
         }
         val day = calendar.get(Calendar.DAY_OF_MONTH)

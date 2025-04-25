@@ -1,7 +1,7 @@
 package com.sasank.reminderpro
 
+import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -21,8 +21,7 @@ import com.sasank.reminderpro.models.Reminder
 import com.sasank.reminderpro.utils.AlarmUtils
 import com.sasank.reminderpro.utils.PreferenceHelper
 
-
-class ReminderFragment: Fragment(){
+class ReminderFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var tvEmptyView: TextView
     private lateinit var fabAddReminder: FloatingActionButton
@@ -31,16 +30,14 @@ class ReminderFragment: Fragment(){
     private lateinit var preferenceHelper: PreferenceHelper
     private lateinit var alarmUtils: AlarmUtils
 
-    private val reminderResultLauncher=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        result->
-        if(result.resultCode== Activity.RESULT_OK){
+    private val reminderResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
             loadReminders()
         }
     }
 
-    private val notificationPermissionLauncher=registerForActivityResult(ActivityResultContracts.RequestPermission()){
-        isGranted->
-        if(!isGranted){
+    private val notificationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (!isGranted) {
             showNotificationPermissionExplanation()
         }
     }
@@ -50,13 +47,14 @@ class ReminderFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        // Fix: Return the inflated layout instead of calling super
+        return inflater.inflate(R.layout.fragment_reminder, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        preferenceHelper= PreferenceHelper(requireContext())
-        alarmUtils= AlarmUtils(requireContext())
+        preferenceHelper = PreferenceHelper(requireContext())
+        alarmUtils = AlarmUtils(requireContext())
 
         initViews(view)
         setupListeners()
@@ -64,53 +62,53 @@ class ReminderFragment: Fragment(){
 
         checkNotificationPermission()
 
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.S){
-            val alarmManager=requireContext().getSystemService(Activity.ALARM_SERVICE) as android.app.AlarmManager
-            if(!alarmManager.canScheduleExactAlarms()){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = requireContext().getSystemService(Activity.ALARM_SERVICE) as android.app.AlarmManager
+            if (!alarmManager.canScheduleExactAlarms()) {
                 showExactAlarmPermissionDialog()
             }
         }
     }
 
-    private fun initViews(view: View){
-        recyclerView=view.findViewById(R.id.reminderRecyclerView)
+    private fun initViews(view: View) {
+        recyclerView = view.findViewById(R.id.reminderRecyclerView)
         tvEmptyView = view.findViewById(R.id.tvEmptyView)
         fabAddReminder = view.findViewById(R.id.addReminderBtn)
 
-        recyclerView.layoutManager= LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        reminderAdapter= ReminderAdapter(
+        reminderAdapter = ReminderAdapter(
             reminders = emptyList(),
-            onReminderClickListener = {reminder->
+            onReminderClickListener = { reminder ->
                 openReminderEditor(reminder)
             },
             onDeleteClickListener = { reminder ->
                 showDeleteConfirmationDialog(reminder)
             },
-            onToggleEnabled = {reminder, isEnabled->
+            onToggleEnabled = { reminder, isEnabled ->
                 toggleReminderEnabled(reminder, isEnabled)
             }
         )
-        recyclerView.adapter=reminderAdapter
+        recyclerView.adapter = reminderAdapter
     }
 
-    private fun setupListeners(){
+    private fun setupListeners() {
         fabAddReminder.setOnClickListener {
-            val intent= Intent(requireContext(), ReminderEditActivity::class.java)
+            val intent = Intent(requireContext(), ReminderEditActivity::class.java)
             reminderResultLauncher.launch(intent)
         }
     }
 
-    private fun loadReminders(){
-        val reminders=preferenceHelper.getReminders()
-        if(reminders.isEmpty()){
-            recyclerView.visibility= View.GONE
-            tvEmptyView.visibility= View.VISIBLE
-        } else{
-            recyclerView.visibility= View.VISIBLE
-            tvEmptyView.visibility=View.GONE
+    private fun loadReminders() {
+        val reminders = preferenceHelper.getReminders()
+        if (reminders.isEmpty()) {
+            recyclerView.visibility = View.GONE
+            tvEmptyView.visibility = View.VISIBLE
+        } else {
+            recyclerView.visibility = View.VISIBLE
+            tvEmptyView.visibility = View.GONE
 
-            val sortedReminders=reminders.sortedBy { it.timeInMillis }
+            val sortedReminders = reminders.sortedBy { it.timeInMillis }
             reminderAdapter.updateReminders(sortedReminders)
         }
 
@@ -119,19 +117,20 @@ class ReminderFragment: Fragment(){
         }
     }
 
-    private fun openReminderEditor(reminder: Reminder){
-        val intent= Intent(requireContext(), ReminderEditActivity::class.java).apply {
+    private fun openReminderEditor(reminder: Reminder) {
+        val intent = Intent(requireContext(), ReminderEditActivity::class.java).apply {
             putExtra("reminder", reminder)
         }
         reminderResultLauncher.launch(intent)
     }
 
-    private fun showDeleteConfirmationDialog(reminder: Reminder){
+    private fun showDeleteConfirmationDialog(reminder: Reminder) {
         AlertDialog.Builder(requireContext())
             .setTitle("Delete Reminder")
             .setMessage("Are you sure you want to delete this reminder?")
-            .setPositiveButton("Delete") { _,_,->
-                if(reminder.isEnabled){
+            .setPositiveButton("Delete") { _, _ ->
+                if (reminder.isEnabled) {
+                    // Fix: Now we can pass the Reminder object directly
                     alarmUtils.cancelAlarm(reminder)
                 }
                 preferenceHelper.deleteReminder(reminder)
@@ -141,28 +140,30 @@ class ReminderFragment: Fragment(){
             .show()
     }
 
-    private fun toggleReminderEnabled(reminder: Reminder, isEnabled: Boolean){
-        val updatedReminder=reminder.copy(isEnabled=isEnabled)
+    private fun toggleReminderEnabled(reminder: Reminder, isEnabled: Boolean) {
+        val updatedReminder = reminder.copy(isEnabled = isEnabled)
 
-        if(isEnabled){
+        if (isEnabled) {
             alarmUtils.scheduleAlarm(updatedReminder)
-        } else{
+        } else {
+            // Fix: Now we can pass the Reminder object directly
             alarmUtils.cancelAlarm(updatedReminder)
         }
         preferenceHelper.updateReminder(updatedReminder)
     }
 
-    private fun checkNotificationPermission(){
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU){
-            if(ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.POST_NOTIFICATIONS
-            )!= PackageManager.PERMISSION_GRANTED){
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
     }
 
-    private fun showNotificationPermissionExplanation(){
+    private fun showNotificationPermissionExplanation() {
         AlertDialog.Builder(requireContext())
             .setTitle("Notification Permission")
             .setMessage("Notifications are necessary for reminders to work properly. Please enable notifications in app settings.")

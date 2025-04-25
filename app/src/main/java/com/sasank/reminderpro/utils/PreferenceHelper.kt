@@ -57,10 +57,28 @@ class PreferenceHelper(context: Context) {
         saveReminders(reminders)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    // Method for updating a reminder (used in ReminderFragment)
+    fun updateReminder(reminder: Reminder) {
+        saveReminder(reminder)
+    }
+
+    // Method for deleting a reminder by ID
     fun deleteReminder(id: Int) {
         val reminders = getReminders().toMutableList()
-        reminders.removeIf { it.id == id }
+        // Use a safer way to remove items that works on all API levels
+        val iterator = reminders.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (item.id == id) {
+                iterator.remove()
+                break
+            }
+        }
         saveReminders(reminders)
+    }
+
+    // Overloaded method for deleting a reminder by Reminder object
+    fun deleteReminder(reminder: Reminder) {
+        deleteReminder(reminder.id)
     }
 }
