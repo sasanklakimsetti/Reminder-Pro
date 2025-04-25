@@ -5,7 +5,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.sasank.reminderpro.ui.alarm.AlarmFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,10 +20,10 @@ class MainActivity : AppCompatActivity() {
                         replaceFragment(Clock())
                         true
                     }
-                    R.id.alarm->{
-                        replaceFragment(AlarmFragment())
-                        true
-                    }
+//                    R.id.alarm->{
+//                        replaceFragment(AlarmFragment())
+//                        true
+//                    }
                     R.id.reminder->{
                         replaceFragment(ReminderFragment())
                         true

@@ -7,11 +7,11 @@
         android:icon="@drawable/watch_24px"
         ></item>
 
-    <item
-        android:id="@+id/alarm"
-        android:title="Alarm"
-        android:icon="@drawable/baseline_access_alarm_24"
-        ></item>
+<!--    <item-->
+<!--        android:id="@+id/alarm"-->
+<!--        android:title="Alarm"-->
+<!--        android:icon="@drawable/baseline_access_alarm_24"-->
+<!--        ></item>-->
 
     <item
         android:id="@+id/reminder"
