@@ -28,7 +28,7 @@ class ReminderEditActivity : AppCompatActivity() {
     private lateinit var spinnerRepeatInterval: Spinner
     private lateinit var btnSave: Button
     private lateinit var preferenceHelper: PreferenceHelper
-    private lateinit var reminderCalendar = Calendar.getInstance()
+    private var reminderCalendar = Calendar.getInstance()
     private var isEditing = false
     private var currentReminderId = -1
 
