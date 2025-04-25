@@ -44,7 +44,7 @@ class ReminderAdapter(
         val repeatText=when{
             !currentReminder.isRepeating->"One time"
             else-> when(currentReminder.repeatInterval){
-                Reminder.RepatInterval.DAILY->"Daily"
+                Reminder.RepeatInterval.DAILY->"Daily"
                 Reminder.RepeatInterval.WEEKLY -> "Weekly"
                 Reminder.RepeatInterval.MONTHLY -> "Monthly"
                 else -> "One-time"

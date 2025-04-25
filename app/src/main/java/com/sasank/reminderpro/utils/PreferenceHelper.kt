@@ -2,6 +2,8 @@ package com.sasank.reminderpro.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sasank.reminderpro.models.Reminder
@@ -55,6 +57,7 @@ class PreferenceHelper(context: Context) {
         saveReminders(reminders)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun deleteReminder(id: Int) {
         val reminders = getReminders().toMutableList()
         reminders.removeIf { it.id == id }
