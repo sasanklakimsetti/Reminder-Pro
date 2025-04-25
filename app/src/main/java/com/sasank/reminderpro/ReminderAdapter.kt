@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,7 @@ class ReminderAdapter(
         val dateTextView: TextView = itemView.findViewById(R.id.tvReminderDate)
         val repeatTextView: TextView = itemView.findViewById(R.id.tvRepeatStatus)
         val deleteButton: ImageButton = itemView.findViewById(R.id.btnDelete)
-        val enabledToggle: ToggleButton = itemView.findViewById(R.id.switchEnabled) // Changed from Switch to ToggleButton
+        val enabledToggle: Switch = itemView.findViewById(R.id.switchEnabled)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int ): ReminderViewHolder {
         alarmUtils = AlarmUtils(parent.context)
@@ -51,14 +52,27 @@ class ReminderAdapter(
         }
 
         holder.repeatTextView.text = repeatText
-        // set enabled state
-        holder.enabledToggle.isChecked = currentReminder.isEnabled
+        // Switch handling with listener management
+        holder.enabledToggle.apply {
+            // Remove previous listener to prevent recycling issues
+            setOnCheckedChangeListener(null)
 
-        // click listeners
-        holder.itemView.setOnClickListener { onReminderClickListener(currentReminder) }
-        holder.deleteButton.setOnClickListener { onDeleteClickListener(currentReminder) }
-        holder.enabledToggle.setOnCheckedChangeListener { _, isChecked ->
-            onToggleEnabled(currentReminder, isChecked)
+            // Set current state
+            isChecked = currentReminder.isEnabled
+
+            // Set new listener
+            setOnCheckedChangeListener { _, isChecked ->
+                onToggleEnabled(currentReminder, isChecked)
+            }
+        }
+
+        // Click listeners
+        holder.itemView.setOnClickListener {
+            onReminderClickListener(currentReminder)
+        }
+
+        holder.deleteButton.setOnClickListener {
+            onDeleteClickListener(currentReminder)
         }
     }
 
