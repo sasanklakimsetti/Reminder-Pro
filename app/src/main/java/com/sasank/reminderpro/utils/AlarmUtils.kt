@@ -24,7 +24,7 @@ class AlarmUtils(private val context: Context) {
         }
         val triggerTime = reminder.timeInMillis
         when{
-            reminder.isRepeating && reminder.repeatInterval != Reminde.RepeatInerval.NONE ->
+            reminder.isRepeating && reminder.repeatInterval != Reminder.RepeatInterval.NONE ->
             {
                 val intervalMillis = when(reminder.repeatInterval){
                     Reminder.RepeatInterval.DAILY -> AlarmManager.INTERVAL_DAY
