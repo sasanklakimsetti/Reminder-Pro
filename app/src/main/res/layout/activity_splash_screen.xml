@@ -8,13 +8,14 @@
     tools:context=".SplashScreen">
 
     <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1"
+        android:layout_marginTop="158dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:text="ReminderPro"
         android:textSize="40dp"
-        android:textStyle="bold|italic"
-        android:layout_centerInParent="true"
-        />
+        android:textStyle="bold" />
 
 </RelativeLayout>
