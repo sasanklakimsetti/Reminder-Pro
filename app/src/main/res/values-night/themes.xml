@@ -3,5 +3,7 @@
     <style name="Base.Theme.ReminderPro" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:fontFamily">@font/app_font</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 </resources>

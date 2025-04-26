@@ -20,4 +20,16 @@
         android:fontFamily="@font/splash_screen_font"
         />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:layout_centerHorizontal="true"
+        android:text="An App to remind you...."
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/app_font"
+        />
+
 </RelativeLayout>
