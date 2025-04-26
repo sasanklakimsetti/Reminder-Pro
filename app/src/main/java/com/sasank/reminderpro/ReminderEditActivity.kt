@@ -24,6 +24,7 @@ class ReminderEditActivity : AppCompatActivity() {
     private lateinit var etDescription: EditText
     private lateinit var btnSetDate: Button
     private lateinit var tvSelectedDate: TextView
+    private lateinit var tvSelectedTime: TextView
     private lateinit var btnSetTime: Button
     private lateinit var cbRepeat: CheckBox
     private lateinit var spinnerRepeatInterval: Spinner
@@ -62,6 +63,7 @@ class ReminderEditActivity : AppCompatActivity() {
         etDescription = findViewById(R.id.etDescription)
         btnSetDate = findViewById(R.id.btnSetDate)
         tvSelectedDate = findViewById(R.id.tvSelectedDate)
+        tvSelectedTime=findViewById(R.id.tvSelectedTime)
         btnSetTime = findViewById(R.id.btnSetTime)
         cbRepeat = findViewById(R.id.cbRepeat)
         spinnerRepeatInterval = findViewById(R.id.spinnerRepeatInterval)
@@ -154,7 +156,8 @@ class ReminderEditActivity : AppCompatActivity() {
         val timeText = String.format("%d:%02d %s", hourFormatted, minute, amPm)
 
         // Set the date and time text to the TextView
-        tvSelectedDate.text = "$dateText - $timeText"
+        tvSelectedDate.text = "$dateText"
+        tvSelectedTime.text="$timeText"
     }
 
     private fun saveReminder() {
