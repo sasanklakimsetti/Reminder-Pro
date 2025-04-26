@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ class ReminderEditActivity : AppCompatActivity() {
     private lateinit var cbRepeat: CheckBox
     private lateinit var spinnerRepeatInterval: Spinner
     private lateinit var btnSave: Button
+    private lateinit var gobackBtn: ImageButton
     private lateinit var preferenceHelper: PreferenceHelper
     private var reminderCalendar = Calendar.getInstance()
     private var isEditing = false
@@ -64,6 +66,7 @@ class ReminderEditActivity : AppCompatActivity() {
         cbRepeat = findViewById(R.id.cbRepeat)
         spinnerRepeatInterval = findViewById(R.id.spinnerRepeatInterval)
         btnSave = findViewById(R.id.btnSave)
+        gobackBtn=findViewById(R.id.backBtn)
 
         val repeatOptions = arrayOf("Daily", "Weekly", "Monthly")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, repeatOptions)
@@ -85,6 +88,9 @@ class ReminderEditActivity : AppCompatActivity() {
         }
         btnSave.setOnClickListener {
             saveReminder()
+        }
+        gobackBtn.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
