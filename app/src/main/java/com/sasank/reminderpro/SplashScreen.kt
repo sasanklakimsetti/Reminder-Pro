@@ -31,6 +31,6 @@ class SplashScreen : AppCompatActivity() {
         Handler(mainLooper).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        }, 1500)
+        }, title.length * 100L + 300L)
     }
 }
