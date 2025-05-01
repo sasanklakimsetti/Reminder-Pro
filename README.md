@@ -1,5 +1,5 @@
 # 📱 Reminder-Pro  
-**App to remind you.**
+**An App to remind you.**
 
 ---
 
@@ -47,6 +47,22 @@ git clone "https://github.com/sasanklakimsetti/Reminder-Pro"
 2. Install the latest SDKs (preferably above API 33).  
 3. Select your device or emulator and run the app.  
 4. You should now see the app running.
+
+
+---
+
+## 📲 Run the Application on Your Mobile Using Android Studio
+
+1. **Enable Developer Mode** on your mobile device.
+2. Go to **Developer Options**.
+3. To use **USB Debugging**:
+   - Enable **USB Debugging** in Developer Options.
+   - Connect your mobile to your laptop using a USB cable.
+4. To use **Wireless Debugging**:
+   - Ensure both your mobile and laptop are connected to the same Wi-Fi network.
+   - Pair your mobile with your laptop using the QR code method.
+5. In Android Studio, select your device from the **Device Manager** and click **Run** to deploy the app.
+
 
 ---
 
