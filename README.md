@@ -5,7 +5,7 @@
 
 ## 📦 APK Installation  
 To install the app on your mobile device, download the APK file from the link below:  
-🔗 [Download APK](https://drive.google.com/uc?export=download&id1PhdeI5CIMxjWu9wacBUckJ1Zsn7y-ts8)
+🔗 [Download APK](https://drive.google.com/file/d/1PhdeI5CIMxjWu9wacBUckJ1Zsn7y-ts8/view?usp=drive_link)
 
 ---
 
